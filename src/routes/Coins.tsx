@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { fetchCoins } from '../api';
+import { useQuery } from 'react-query';
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -51,7 +52,7 @@ const Img = styled.img`
   margin-right: 10px;
 `;
 
-interface CoinInterface {
+interface ICoin {
   id: string;
   name: string;
   symbol: string;
@@ -62,27 +63,20 @@ interface CoinInterface {
 }
 
 function Coins() {
-  const [coins, setCoins] = useState<CoinInterface[]>([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    (async () => {
-      // 바로 실행
-      const response = await fetch('https://api.coinpaprika.com/v1/coins');
-      const json = await response.json();
-      setCoins(json.slice(0, 100));
-      setLoading(false);
-    })();
-  }, []);
+  const { isLoading, data } = useQuery<ICoin[]>({
+    queryKey: ['allCoins'],
+    queryFn: fetchCoins,
+  });
   return (
     <Container>
       <Header>
         <Title>코인들!</Title>
       </Header>
-      {loading ? (
+      {isLoading ? (
         <Loader>코인 정보를 불러오는 중입니다...</Loader>
       ) : (
         <CoinsList>
-          {coins.map((coin) => (
+          {data?.slice(0, 100).map((coin) => (
             <Coin key={coin.id}>
               <Link to={`/${coin.id}`} state={coin}>
                 <Img
