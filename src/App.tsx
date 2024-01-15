@@ -1,9 +1,11 @@
 import { createGlobalStyle } from "styled-components";
+import ToDoList from "./ToDoList";
 
 function App() {
   return (
     <>
       <GlobalStyle />
+      <ToDoList />
     </>
   );
 }
