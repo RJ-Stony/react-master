@@ -1,6 +1,6 @@
-import { useQuery } from 'react-query';
-import { fetchCoinHistory } from '../api';
-import ApexCharts from 'react-apexcharts';
+import { useQuery } from "react-query";
+import { fetchCoinHistory } from "../api";
+import ApexCharts from "react-apexcharts";
 
 interface IHistorical {
   time_open: number;
@@ -17,28 +17,31 @@ interface ChartProps {
   coinId: string;
 }
 
-function Chart({ coinId }: ChartProps) {
+function Chart({ coinId, isdark }: ChartProps & { isdark: boolean }) {
   const { isLoading, data } = useQuery<IHistorical[]>({
-    queryKey: ['ohlcv', coinId],
+    queryKey: ["ohlcv", coinId],
     queryFn: () => fetchCoinHistory(coinId),
   });
   return (
     <div>
+      {/* <Helmet>
+        <title>Chart</title>
+      </Helmet> */}
       {isLoading ? (
-        'Loading chart...'
+        "Loading chart..."
       ) : (
         <ApexCharts
           type="line"
           series={[
             {
-              name: 'Price',
+              name: "Price",
               data: data?.map((price) => parseFloat(price.close)) ?? [],
             },
           ]}
           options={{
-            colors: ['#fbc531'],
+            colors: ["#fbc531"],
             theme: {
-              mode: 'dark',
+              mode: isdark ? "dark" : "light",
             },
             chart: {
               height: 500,
@@ -46,13 +49,13 @@ function Chart({ coinId }: ChartProps) {
               toolbar: {
                 show: false,
               },
-              background: 'transparent',
+              background: "transparent",
             },
             grid: {
               show: false,
             },
             stroke: {
-              curve: 'smooth',
+              curve: "smooth",
               width: 4,
             },
             xaxis: {
@@ -65,6 +68,7 @@ function Chart({ coinId }: ChartProps) {
               axisTicks: {
                 show: false,
               },
+              type: "datetime",
               categories: data?.map((price) =>
                 new Date(price.time_close * 1000).toUTCString()
               ),
@@ -73,8 +77,8 @@ function Chart({ coinId }: ChartProps) {
               show: false,
             },
             fill: {
-              type: 'gradient',
-              gradient: { gradientToColors: ['#e84118'], stops: [0, 100] },
+              type: "gradient",
+              gradient: { gradientToColors: ["#e84118"], stops: [0, 100] },
             },
             tooltip: {
               y: {

@@ -5,12 +5,15 @@ import {
   useLocation,
   useParams,
   useMatch,
-} from 'react-router-dom';
-import styled from 'styled-components';
-import Price from './Price';
-import Chart from './Chart';
-import { useQuery } from 'react-query';
-import { fetchCoinInfo, fetchCoinTickers } from '../api';
+} from "react-router-dom";
+import styled from "styled-components";
+import Price from "./Price";
+import Chart from "./Chart";
+import { useQuery } from "react-query";
+import { fetchCoinInfo, fetchCoinTickers } from "../api";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../atoms";
+import { useEffect } from "react";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -23,6 +26,54 @@ const Header = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const Homes = styled.div`
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  font-size: 0%.9rem;
+  color: ${(props) => props.theme.accentColor};
+  padding: 10px 20px;
+  margin-top: 10px;
+`;
+
+const BtnContainer = styled.div`
+  position: absolute;
+  right: 0;
+  margin: 5px;
+`;
+
+const ThemeToggle = styled.button<{ isdark: boolean }>`
+  background: ${({ theme }) => theme.bgColor};
+  border: 2px solid ${({ theme }) => theme.accentColor};
+  border-radius: 30px;
+  cursor: pointer;
+  display: flex;
+  font-size: 0.5rem;
+  justify-content: space-between;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 0.3rem;
+  position: relative;
+  width: 4rem;
+  height: 2rem;
+  /* svg {
+    height: auto;
+    width: 1.3rem;
+    transition: all 0.3s linear;
+    // sun icon
+    &:first-child {
+      transform: ${(props) =>
+    props.isdark ? "translateY(100px)" : `translateY(0px)`};
+    }
+
+    // moon icon
+    &:last-child {
+      transform: ${(props) =>
+    !props.isdark ? "translateY(100px)" : `translateY(0px)`};
+    }
+  } */
 `;
 
 const Overview = styled.div`
@@ -145,25 +196,52 @@ interface IPriceData {
 function Coin() {
   const { coinId } = useParams();
   const { state } = useLocation() as IRouterState;
-  const priceMatch = useMatch('/:coinId/price');
-  const chartMatch = useMatch('/:coinId/chart');
+  const priceMatch = useMatch("/:coinId/price");
+  const chartMatch = useMatch("/:coinId/chart");
+
   const { isLoading: infoLoading, data: infoData } = useQuery<IInfoData>({
-    queryKey: ['info', coinId],
+    queryKey: ["info", coinId],
     queryFn: () => fetchCoinInfo(coinId),
   });
+
   const { isLoading: tickersLoading, data: tickersData } = useQuery<IPriceData>(
     {
-      queryKey: ['tickers', coinId],
+      queryKey: ["tickers", coinId],
       queryFn: () => fetchCoinTickers(coinId),
     }
   );
+
+  useEffect(() => {
+    // 타이틀 설정 로직
+    document.title = state?.name
+      ? state.name
+      : infoLoading
+      ? "Loading..."
+      : infoData?.name || "Coin";
+  }, [state, infoLoading, infoData]);
+
   const loading = infoLoading || tickersLoading;
+  const isdark = useRecoilValue(isDarkAtom);
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleTheme = () => setDarkAtom((prev) => !prev);
+
   return (
     <Container>
+      {/* <Helmet>
+        <title>
+          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+        </title>
+      </Helmet> */}
+      <Homes>
+        <Link to={`/`}>Back</Link>
+      </Homes>
       <Header>
         <Title>
-          {state?.name ? state.name : loading ? 'Loading...' : infoData?.name}
+          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
+        <BtnContainer>
+          <ThemeToggle isdark={isdark} onClick={toggleTheme}></ThemeToggle>
+        </BtnContainer>
       </Header>
       {loading ? (
         <Loader>코인 정보를 불러오는 중입니다...</Loader>
@@ -179,8 +257,8 @@ function Coin() {
               <span>${infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>Open Source:</span>
-              <span>{infoData?.open_source ? 'Yes' : 'No'}</span>
+              <span>Price:</span>
+              <span>${tickersData?.quotes?.USD?.price?.toFixed(3)}</span>
             </OverviewItem>
           </Overview>
           <Overview>
@@ -207,8 +285,11 @@ function Coin() {
             </Tab>
           </Tabs>
           <Routes>
-            <Route path="price" element={<Price />}></Route>
-            <Route path="chart" element={<Chart coinId={coinId!} />}></Route>
+            <Route path="price" element={<Price />} />
+            <Route
+              path="chart"
+              element={<Chart coinId={coinId!} isdark={isdark} />}
+            />
           </Routes>
         </>
       )}

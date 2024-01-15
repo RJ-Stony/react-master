@@ -1,7 +1,10 @@
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import { fetchCoins } from '../api';
-import { useQuery } from 'react-query';
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { fetchCoins } from "../api";
+import { useQuery } from "react-query";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../atoms";
+import { useEffect } from "react";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -19,10 +22,11 @@ const Header = styled.header`
 const CoinsList = styled.ul``;
 
 const Coin = styled.li`
-  background-color: white;
-  color: ${(props) => props.theme.bgColor};
+  background-color: ${(props) => props.theme.cardBgColor};
+  color: ${(props) => props.theme.textColor};
   border-radius: 15px;
   margin-bottom: 10px;
+  border: 1px solid white;
   a {
     padding: 20px;
     transition: color 0.15s ease-in;
@@ -39,6 +43,44 @@ const Coin = styled.li`
 const Title = styled.h1`
   font-size: 28px;
   color: ${(props) => props.theme.accentColor};
+`;
+
+const BtnContainer = styled.div`
+  position: absolute;
+  right: 0;
+  margin: 5px;
+`;
+
+const ThemeToggle = styled.button<{ $isdark: boolean }>`
+  background: ${({ theme }) => theme.bgColor};
+  border: 2px solid ${({ theme }) => theme.accentColor};
+  border-radius: 30px;
+  cursor: pointer;
+  display: flex;
+  font-size: 0.5rem;
+  justify-content: space-between;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 0.3rem;
+  position: relative;
+  width: 4rem;
+  height: 2rem;
+  /* svg {
+    height: auto;
+    width: 1.3rem;
+    transition: all 0.3s linear;
+    // sun icon
+    &:first-child {
+      transform: ${(props) =>
+    props.$isdark ? "translateY(100px)" : `translateY(0px)`};
+    }
+
+    // moon icon
+    &:last-child {
+      transform: ${(props) =>
+    !props.$isdark ? "translateY(100px)" : `translateY(0px)`};
+    }
+  } */
 `;
 
 const Loader = styled.span`
@@ -63,14 +105,25 @@ interface ICoin {
 }
 
 function Coins() {
+  const isDark = useRecoilValue(isDarkAtom);
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleTheme = () => setDarkAtom((prev) => !prev);
   const { isLoading, data } = useQuery<ICoin[]>({
-    queryKey: ['allCoins'],
+    queryKey: ["allCoins"],
     queryFn: fetchCoins,
   });
+
+  useEffect(() => {
+    document.title = "Coins";
+  }, []);
+
   return (
     <Container>
       <Header>
         <Title>코인들!</Title>
+        <BtnContainer>
+          <ThemeToggle $isdark={isDark} onClick={toggleTheme}></ThemeToggle>
+        </BtnContainer>
       </Header>
       {isLoading ? (
         <Loader>코인 정보를 불러오는 중입니다...</Loader>
@@ -78,7 +131,7 @@ function Coins() {
         <CoinsList>
           {data?.slice(0, 100).map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/${coin.id}`} state={coin}>
+              <Link to={`/${coin.id}`} state={coin.name}>
                 <Img
                   src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
                 />
