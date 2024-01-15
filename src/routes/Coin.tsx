@@ -39,9 +39,7 @@ const Homes = styled.div`
 `;
 
 const BtnContainer = styled.div`
-  position: absolute;
-  right: 80px;
-  margin: 5px;
+  position: relative;
 `;
 
 const ThemeToggle = styled.button<{ isdark: boolean }>`
@@ -55,9 +53,11 @@ const ThemeToggle = styled.button<{ isdark: boolean }>`
   margin: 0 auto;
   overflow: hidden;
   padding: 0.3rem;
-  position: relative;
+  position: absolute;
   width: 4rem;
   height: 2rem;
+  left: 19vw;
+  bottom: -2.25vh;
   /* svg {
     height: auto;
     width: 1.3rem;
@@ -279,11 +279,8 @@ function Coin() {
             </Tab>
           </Tabs>
           <Routes>
-            <Route path="price" element={<Price />} />
-            <Route
-              path="chart"
-              element={<Chart coinId={coinId!} isdark={isdark} />}
-            />
+            <Route path="price" element={<Price coinId={coinId!} />} />
+            <Route path="chart" element={<Chart coinId={coinId!} />} />
           </Routes>
         </>
       )}
