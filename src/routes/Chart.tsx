@@ -24,9 +24,6 @@ function Chart({ coinId, isdark }: ChartProps & { isdark: boolean }) {
   });
   return (
     <div>
-      {/* <Helmet>
-        <title>Chart</title>
-      </Helmet> */}
       {isLoading ? (
         "Loading chart..."
       ) : (

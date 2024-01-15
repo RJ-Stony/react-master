@@ -47,7 +47,7 @@ const Title = styled.h1`
 
 const BtnContainer = styled.div`
   position: absolute;
-  right: 0;
+  right: 80px;
   margin: 5px;
 `;
 

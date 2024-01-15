@@ -40,7 +40,7 @@ const Homes = styled.div`
 
 const BtnContainer = styled.div`
   position: absolute;
-  right: 0;
+  right: 80px;
   margin: 5px;
 `;
 
@@ -212,7 +212,6 @@ function Coin() {
   );
 
   useEffect(() => {
-    // 타이틀 설정 로직
     document.title = state?.name
       ? state.name
       : infoLoading
@@ -227,11 +226,6 @@ function Coin() {
 
   return (
     <Container>
-      {/* <Helmet>
-        <title>
-          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
-        </title>
-      </Helmet> */}
       <Homes>
         <Link to={`/`}>Back</Link>
       </Homes>
