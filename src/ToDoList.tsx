@@ -7,7 +7,8 @@ interface IForm {
   lastName?: string;
   userName: string;
   password: string;
-  confirm?: string;
+  confirm: string;
+  extraError?: string;
 }
 
 function ToDoList() {
@@ -15,12 +16,24 @@ function ToDoList() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<IForm>({
     defaultValues: {
       email: "@naver.com",
     },
   });
-  const onValid = (data: any) => {};
+
+  const onValid = (data: IForm) => {
+    if (data.password !== data.confirm) {
+      setError(
+        "confirm",
+        { message: "Password are not the same." },
+        { shouldFocus: true }
+      );
+    }
+    // setError("extraError", { message: "Server Offline." });
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit(onValid)}>
@@ -33,12 +46,25 @@ function ToDoList() {
             },
           })}
           style={{
-            borderColor: (errors.email?.message as string) ? "red" : "",
+            borderColor: errors?.email?.message ? "red" : "",
           }}
           placeholder="Email"
         />
-        <span>{errors.email?.message as string}</span>
-        <input {...register("firstName")} placeholder="First Name" />
+        <span>{errors?.email?.message}</span>
+        <input
+          {...register("firstName", {
+            required: "Write Here.",
+            validate: {
+              noJun: (value) => !value?.includes("Jun") || "No Jun Allowed",
+              noSeok: (value) => !value?.includes("Seok") || "No Seok Allowed",
+            },
+          })}
+          style={{
+            borderColor: errors?.firstName?.message ? "red" : "",
+          }}
+          placeholder="First Name"
+        />
+        <span>{errors?.firstName?.message}</span>
         <input {...register("lastName")} placeholder="Last Name" />
         <input
           {...register("userName", {
@@ -46,24 +72,32 @@ function ToDoList() {
             minLength: 10,
           })}
           style={{
-            borderColor: (errors.userName?.message as string) ? "red" : "",
+            borderColor: errors?.userName?.message ? "red" : "",
           }}
           placeholder="User Name"
         />
-        <span>{errors.userName?.message as string}</span>
+        <span>{errors?.userName?.message}</span>
         <input
           {...register("password", {
             required: "Password is required.",
             minLength: { value: 5, message: "Your password is too short." },
           })}
           style={{
-            borderColor: (errors.password?.message as string) ? "red" : "",
+            borderColor: errors?.password?.message ? "red" : "",
           }}
           placeholder="Password"
         />
-        <span>{errors.password?.message as string}</span>
-        <input {...register("confirm")} placeholder="Confirm" />
+        <span>{errors?.password?.message}</span>
+        <input
+          {...register("confirm", { required: "Password is required." })}
+          style={{
+            borderColor: errors?.confirm?.message ? "red" : "",
+          }}
+          placeholder="Confirm"
+        />
+        <span>{errors?.confirm?.message}</span>
         <button>Add</button>
+        <span>{errors?.extraError?.message}</span>
       </form>
     </div>
   );
