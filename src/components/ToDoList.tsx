@@ -12,7 +12,7 @@ function ToDoList() {
   const toDos = useRecoilValue(toDoState);
   return (
     <div>
-      <Title>To Do List</Title>
+      <Title>투두리스트</Title>
       <hr />
       <CreateToDo />
       <ul>

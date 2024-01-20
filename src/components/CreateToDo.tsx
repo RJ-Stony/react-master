@@ -39,9 +39,9 @@ function CreateToDo() {
     <Form onSubmit={handleSubmit(handleValid)}>
       <ToDoInput
         {...register("toDo", { required: "Please write a To Do." })}
-        placeholder="Write a To Do."
+        placeholder="해야 할 일을 적어주세욧!"
       />
-      <SubmitButton>Add</SubmitButton>
+      <SubmitButton>추가</SubmitButton>
     </Form>
   );
 }
