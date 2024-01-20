@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { IToDo, toDoState } from "./atoms";
+import { Categories, IToDo, toDoState } from "./atoms";
 import { useSetRecoilState } from "recoil";
 
 const ToDosContainer = styled.li`
@@ -33,7 +33,7 @@ function ToDo({ text, category, id }: IToDo) {
     } = event;
     setToDos((oldToDos) => {
       const targetIndex = oldToDos.findIndex((toDO) => toDO.id === id);
-      const newToDo = { text, id, category: name as IToDo["category"] };
+      const newToDo = { text, id, category: name as Categories };
       return [
         ...oldToDos.slice(0, targetIndex),
         newToDo,
@@ -45,18 +45,18 @@ function ToDo({ text, category, id }: IToDo) {
     <ToDosContainer>
       <TextContainer>{text}</TextContainer>
       <ButtonContainer>
-        {category !== "TO_DO" && (
-          <StateButton name="TO_DO" onClick={onClick}>
+        {category !== Categories.TO_DO && (
+          <StateButton name={Categories.TO_DO} onClick={onClick}>
             해야 할 일
           </StateButton>
         )}
-        {category !== "DOING" && (
-          <StateButton name="DOING" onClick={onClick}>
+        {category !== Categories.DOING && (
+          <StateButton name={Categories.DOING} onClick={onClick}>
             하는 중...
           </StateButton>
         )}
-        {category !== "DONE" && (
-          <StateButton name="DONE" onClick={onClick}>
+        {category !== Categories.DONE && (
+          <StateButton name={Categories.DONE} onClick={onClick}>
             해냈다!
           </StateButton>
         )}
