@@ -24,19 +24,17 @@ const Boards = styled.div`
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
-  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+  const onDragEnd = ({ destination, draggableId, source }: DropResult) => {
     if (!destination) return;
     setToDos((allBoards) => {
       const copyToDos: IToDoState = {};
+      const taskObj = allBoards[source.droppableId][source.index];
+      console.log(taskObj);
       Object.keys(allBoards).forEach((toDosKey) => {
         copyToDos[toDosKey] = [...allBoards[toDosKey]];
       });
       copyToDos[source.droppableId].splice(source.index, 1);
-      copyToDos[destination.droppableId].splice(
-        destination.index,
-        0,
-        draggableId
-      );
+      copyToDos[destination.droppableId].splice(destination?.index, 0, taskObj);
       return copyToDos;
     });
     // console.log(info);
@@ -45,10 +43,11 @@ function App() {
     // if (destination?.droppableId === source.droppableId) {
     //   setToDos((allBoards) => {
     //     const boardCopy = [...allBoards[source.droppableId]];
+    //     const taskObj = boardCopy[source.index];
     //     // 1) Delete item on source.index
     //     boardCopy.splice(source.index, 1);
     //     // 2) Put back the item on the destination.index
-    //     boardCopy.splice(destination?.index, 0, draggableId);
+    //     boardCopy.splice(destination?.index, 0, taskObj);
     //     return {
     //       ...allBoards,
     //       [source.droppableId]: boardCopy,
@@ -59,9 +58,10 @@ function App() {
     //   // cross board movement
     //   setToDos((allBoards) => {
     //     const sourceBoard = [...allBoards[source.droppableId]];
+    //     const taskObj = sourceBoard[source.index];
     //     const destinationBoard = [...allBoards[destination.droppableId]];
     //     sourceBoard.splice(source.index, 1);
-    //     destinationBoard.splice(destination?.index, 0, draggableId);
+    //     destinationBoard.splice(destination?.index, 0, taskObj);
     //     return {
     //       ...allBoards,
     //       [source.droppableId]: sourceBoard,
