@@ -2,7 +2,7 @@ import { atom, selector, RecoilEnv } from "recoil";
 
 RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false;
 
-interface IToDoState {
+export interface IToDoState {
   [key: string]: string[];
 }
 

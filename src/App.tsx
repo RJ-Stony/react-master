@@ -1,7 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import styled from "styled-components";
-import { toDoState } from "./atoms";
+import { IToDoState, toDoState } from "./atoms";
 import { useRecoilState } from "recoil";
 import Board from "./components/Board";
 
@@ -24,22 +24,51 @@ const Boards = styled.div`
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
-  const onDragEnd = (info: DropResult) => {
-    console.log(info);
-    const { destination, draggableId, source } = info;
-    if (destination?.droppableId === source.droppableId) {
-      setToDos((allBoards) => {
-        const boardCopy = [...allBoards[source.droppableId]];
-        // 1) Delete item on source.index
-        boardCopy.splice(source.index, 1);
-        // 2) Put back the item on the destination.index
-        boardCopy.splice(destination?.index, 0, draggableId);
-        return {
-          ...allBoards,
-          [source.droppableId]: boardCopy,
-        };
+  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+    if (!destination) return;
+    setToDos((allBoards) => {
+      const copyToDos: IToDoState = {};
+      Object.keys(allBoards).forEach((toDosKey) => {
+        copyToDos[toDosKey] = [...allBoards[toDosKey]];
       });
-    }
+      copyToDos[source.droppableId].splice(source.index, 1);
+      copyToDos[destination.droppableId].splice(
+        destination.index,
+        0,
+        draggableId
+      );
+      return copyToDos;
+    });
+    // console.log(info);
+    // const { destination, draggableId, source } = info;
+    // if (!destination) return;
+    // if (destination?.droppableId === source.droppableId) {
+    //   setToDos((allBoards) => {
+    //     const boardCopy = [...allBoards[source.droppableId]];
+    //     // 1) Delete item on source.index
+    //     boardCopy.splice(source.index, 1);
+    //     // 2) Put back the item on the destination.index
+    //     boardCopy.splice(destination?.index, 0, draggableId);
+    //     return {
+    //       ...allBoards,
+    //       [source.droppableId]: boardCopy,
+    //     };
+    //   });
+    // }
+    // if (destination.droppableId !== source.droppableId) {
+    //   // cross board movement
+    //   setToDos((allBoards) => {
+    //     const sourceBoard = [...allBoards[source.droppableId]];
+    //     const destinationBoard = [...allBoards[destination.droppableId]];
+    //     sourceBoard.splice(source.index, 1);
+    //     destinationBoard.splice(destination?.index, 0, draggableId);
+    //     return {
+    //       ...allBoards,
+    //       [source.droppableId]: sourceBoard,
+    //       [destination.droppableId]: destinationBoard,
+    //     };
+    //   });
+    // }
   };
   return (
     <>
