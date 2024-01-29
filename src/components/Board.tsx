@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { IToDO, toDoState } from "../atoms";
 import { useSetRecoilState } from "recoil";
-import { getAllByRole } from "@testing-library/react";
 
 const Wrapper = styled.div`
   padding-top: 10px;
@@ -44,9 +43,18 @@ const Form = styled.form`
   align-items: center;
   justify-content: center;
   display: flex;
+
   input {
     border-radius: 5px;
-    padding: 5px;
+    padding: 7px;
+    font-size: 13px;
+    border: 1px solid #ced4da;
+    width: 80%;
+
+    &:focus {
+      border-color: #80bdff;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
   }
 `;
 
