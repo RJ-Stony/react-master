@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { IToDoState, toDoState } from "./atoms";
 import { useRecoilState } from "recoil";
 import Board from "./components/Board";
+import TrashBin from "./components/TrashBin";
 
 const Wrapper = styled.div`
   display: flex;
@@ -12,7 +13,7 @@ const Wrapper = styled.div`
   margin: 0 auto;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 90vh;
 `;
 
 const Boards = styled.div`
@@ -22,6 +23,14 @@ const Boards = styled.div`
   grid-template-columns: repeat(3, 1fr);
 `;
 
+const Garbage = styled.div`
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  width: 150px;
+  height: 150px;
+`;
+
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
   const onDragEnd = ({ destination, draggableId, source }: DropResult) => {
@@ -29,12 +38,21 @@ function App() {
     setToDos((allBoards) => {
       const copyToDos: IToDoState = {};
       const taskObj = allBoards[source.droppableId][source.index];
-      console.log(taskObj);
+      // console.log(taskObj);
       Object.keys(allBoards).forEach((toDosKey) => {
         copyToDos[toDosKey] = [...allBoards[toDosKey]];
       });
-      copyToDos[source.droppableId].splice(source.index, 1);
-      copyToDos[destination.droppableId].splice(destination?.index, 0, taskObj);
+      if (destination.droppableId === "trashBin") {
+        copyToDos[source.droppableId].splice(source.index, 1);
+      } else {
+        copyToDos[source.droppableId].splice(source.index, 1);
+        copyToDos[destination.droppableId].splice(
+          destination?.index,
+          0,
+          taskObj
+        );
+      }
+
       return copyToDos;
     });
   };
@@ -49,6 +67,9 @@ function App() {
             ))}
           </Boards>
         </Wrapper>
+        <Garbage>
+          <TrashBin />
+        </Garbage>
       </DragDropContext>
     </>
   );

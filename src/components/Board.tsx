@@ -19,6 +19,7 @@ const Title = styled.h2`
   font-weight: 600;
   margin-bottom: 10px;
   font-size: 18px;
+  color: white;
 `;
 
 interface IAreaProps {
@@ -36,6 +37,8 @@ const Area = styled.div<IAreaProps>`
   flex-grow: 1;
   transition: background-color 0.3s ease-in-out;
   padding: 15px;
+  margin-top: 10px;
+  border-radius: 5px;
 `;
 
 const Form = styled.form`
@@ -50,6 +53,7 @@ const Form = styled.form`
     font-size: 13px;
     border: 1px solid #ced4da;
     width: 80%;
+    font-weight: bold;
 
     &:focus {
       border-color: #80bdff;
