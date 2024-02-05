@@ -10,7 +10,8 @@ const Wrapper = styled.div`
 `;
 
 const BoxesContainer = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 `;
 
@@ -18,7 +19,7 @@ const FirstBox = styled(motion.div)`
   width: 150px;
   height: 150px;
   background-color: white;
-  border-radius: 15px;
+  border-radius: 30px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
@@ -69,6 +70,34 @@ const circleVars = {
   },
 };
 
+const ThirdBox = styled(motion.div)`
+  width: 150px;
+  height: 150px;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 30px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+`;
+
+const thirdVars = {
+  hover: { rotateZ: 90 },
+  click: { scale: 1, borderRadius: "100px" },
+};
+
+const ForthBox = styled(motion.div)`
+  width: 150px;
+  height: 150px;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 30px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+`;
+
+const forthVars = {
+  drag: {
+    backgroundColor: "rgb(145, 208, 233)",
+    transition: { duration: 0.5 },
+  },
+};
+
 function App() {
   return (
     <Wrapper>
@@ -80,6 +109,8 @@ function App() {
           <Circle variants={circleVars} />
           <Circle variants={circleVars} />
         </SecondBox>
+        <ThirdBox variants={thirdVars} whileHover="hover" whileTap="click" />
+        <ForthBox drag variants={forthVars} whileDrag="drag"></ForthBox>
       </BoxesContainer>
     </Wrapper>
   );
