@@ -119,6 +119,30 @@ const FifthBox = styled(motion.div)`
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
+const Svg = styled.svg`
+  width: 150px;
+  height: 150px;
+  color: white;
+  path {
+    stroke: "white";
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+`;
+
+const svg = {
+  start: {
+    pathLength: 0,
+    stroke: "rgba(255, 255, 255, 0)",
+    fill: "rgba(135, 200, 146, 0)",
+  },
+  end: {
+    pathLength: 1,
+    stroke: "rgba(0, 0, 0, 1)",
+    fill: "rgb(13, 158, 0)",
+  },
+};
+
 function App() {
   const wrapperBoxRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
@@ -163,6 +187,28 @@ function App() {
           drag="x"
           dragSnapToOrigin
         ></FifthBox>
+        <Svg viewBox="0 0 16 18" xmlns="http://www.w3.org/2000/svg">
+          <motion.path
+            variants={svg}
+            initial={"start"}
+            animate={"end"}
+            transition={{
+              default: { duration: 3 },
+              fill: { duration: 1, delay: 3 },
+            }}
+            d="M4.89027 13.4419C14.1915 13.4419 14.9406 5.52842 14.9999 1.76847C15.0068 1.33881 14.6471 0.992243 14.2174 1.00013C1 1.24288 1 7.65066 1 13.4419V16.5541"
+          />
+          <motion.path
+            variants={svg}
+            initial={"start"}
+            animate={"end"}
+            transition={{
+              default: { duration: 3 },
+              fill: { duration: 1, delay: 3 },
+            }}
+            d="M1 13.4415C1 13.4415 1 8.77317 7.22443 7.99512"
+          />
+        </Svg>
       </BoxesContainer>
     </Wrapper>
   );
