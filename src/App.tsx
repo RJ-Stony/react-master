@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 import { useRef } from "react";
 
 const Wrapper = styled.div`
@@ -95,7 +95,7 @@ const WrapperBoxForFB = styled.div`
   overflow: hidden;
 `;
 
-const ForthBox = styled(motion.div)`
+const FourthBox = styled(motion.div)`
   width: 75px;
   height: 75px;
   background-color: rgba(255, 255, 255, 1);
@@ -103,15 +103,24 @@ const ForthBox = styled(motion.div)`
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
-const forthVars = {
+const fourthVars = {
   drag: {
     backgroundColor: "rgb(0, 132, 90)",
     transition: { duration: 0.5 },
   },
 };
 
+const FifthBox = styled(motion.div)`
+  width: 150px;
+  height: 150px;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 30px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+`;
+
 function App() {
   const wrapperBoxRef = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
   return (
     <Wrapper>
       <BoxesContainer>
@@ -124,15 +133,16 @@ function App() {
         </SecondBox>
         <ThirdBox variants={thirdVars} whileHover="hover" whileTap="click" />
         <WrapperBoxForFB ref={wrapperBoxRef}>
-          <ForthBox
+          <FourthBox
             drag
             dragSnapToOrigin
             dragElastic={0.5}
             dragConstraints={wrapperBoxRef}
-            variants={forthVars}
+            variants={fourthVars}
             whileDrag="drag"
-          ></ForthBox>
+          ></FourthBox>
         </WrapperBoxForFB>
+        <FifthBox style={{ x }} drag="x" dragSnapToOrigin></FifthBox>
       </BoxesContainer>
     </Wrapper>
   );
