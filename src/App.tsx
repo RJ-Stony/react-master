@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import { useRef } from "react";
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -83,22 +84,34 @@ const thirdVars = {
   click: { scale: 1, borderRadius: "100px" },
 };
 
-const ForthBox = styled(motion.div)`
+const WrapperBoxForFB = styled.div`
   width: 150px;
   height: 150px;
-  background-color: rgba(255, 255, 255, 1);
+  background-color: rgba(255, 255, 255, 0.2);
   border-radius: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+`;
+
+const ForthBox = styled(motion.div)`
+  width: 75px;
+  height: 75px;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 12px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
 const forthVars = {
   drag: {
-    backgroundColor: "rgb(145, 208, 233)",
+    backgroundColor: "rgb(0, 132, 90)",
     transition: { duration: 0.5 },
   },
 };
 
 function App() {
+  const wrapperBoxRef = useRef<HTMLDivElement>(null);
   return (
     <Wrapper>
       <BoxesContainer>
@@ -110,7 +123,16 @@ function App() {
           <Circle variants={circleVars} />
         </SecondBox>
         <ThirdBox variants={thirdVars} whileHover="hover" whileTap="click" />
-        <ForthBox drag variants={forthVars} whileDrag="drag"></ForthBox>
+        <WrapperBoxForFB ref={wrapperBoxRef}>
+          <ForthBox
+            drag
+            dragSnapToOrigin
+            dragElastic={0.5}
+            dragConstraints={wrapperBoxRef}
+            variants={forthVars}
+            whileDrag="drag"
+          ></ForthBox>
+        </WrapperBoxForFB>
       </BoxesContainer>
     </Wrapper>
   );
