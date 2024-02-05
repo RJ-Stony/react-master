@@ -1,13 +1,14 @@
 import styled from "styled-components";
-import { motion, useMotionValue } from "framer-motion";
+import { motion, useMotionValue, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
-const Wrapper = styled.div`
-  height: 100vh;
+const Wrapper = styled(motion.div)`
+  height: 200vh;
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(135deg, rgb(135, 200, 146), rgb(106, 204, 204));
 `;
 
 const BoxesContainer = styled.div`
@@ -121,8 +122,23 @@ const FifthBox = styled(motion.div)`
 function App() {
   const wrapperBoxRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
+  const rotateZ = useTransform(x, [-260, 0, 420], [-360, 0, 360]);
+  const gradient = useTransform(
+    x,
+    [-260, 0, 420],
+    [
+      "linear-gradient(135deg, rgb(204, 130, 130), rgb(236, 204, 116))",
+      "linear-gradient(135deg, rgb(135, 200, 146), rgb(106, 204, 204))",
+      "linear-gradient(135deg, rgb(163, 135, 200), rgb(108, 106, 204))",
+    ]
+  );
+  const { scrollYProgress } = useScroll();
+  const scale = useTransform(scrollYProgress, [0, 1], [0, 1.2]);
+  // useMotionValueEvent(x, "change", (I) => {
+  //   console.log(I);
+  // });
   return (
-    <Wrapper>
+    <Wrapper style={{ background: gradient }}>
       <BoxesContainer>
         <FirstBox variants={firstVars} initial="start" animate="end" />
         <SecondBox variants={secondVars} initial="start" animate="end">
@@ -142,7 +158,11 @@ function App() {
             whileDrag="drag"
           ></FourthBox>
         </WrapperBoxForFB>
-        <FifthBox style={{ x }} drag="x" dragSnapToOrigin></FifthBox>
+        <FifthBox
+          style={{ x, rotateZ, scale }}
+          drag="x"
+          dragSnapToOrigin
+        ></FifthBox>
       </BoxesContainer>
     </Wrapper>
   );
