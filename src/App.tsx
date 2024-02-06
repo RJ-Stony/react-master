@@ -265,11 +265,52 @@ const CircleForEB = styled(motion.div)`
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
+const LastBox = styled(motion.div)`
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 20px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+`;
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 80vw;
+  height: 60vh;
+  gap: 15px;
+  div:first-child,
+  div:last-child {
+    grid-column: span 2;
+  }
+`;
+
+const Overlay = styled(motion.div)`
+  width: 80%;
+  height: 60%;
+  position: absolute;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const overlayVars = {
+  initial: {
+    backgroundColor: "rgba(0, 0, 0, 0)",
+  },
+  animate: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  exit: {
+    backgroundColor: "rgba(0, 0, 0, 0)",
+  },
+};
+
 function App() {
   const [showing, setShowing] = useState(false);
   const [visible, setVisible] = useState(1);
   const [back, setBack] = useState(false);
   const [clicked, setClicked] = useState(false);
+  const [id, setId] = useState<null | string>(null);
 
   const wrapperBoxRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
@@ -284,7 +325,7 @@ function App() {
     ]
   );
   const { scrollYProgress } = useScroll();
-  const scale = useTransform(scrollYProgress, [0, 1], [0, 1.2]);
+  const scale = useTransform(scrollYProgress, [0, 1], [0.5, 1]);
   const toggleShowing = () => setShowing((prev) => !prev);
   const nextPlease = () => {
     setBack(false);
@@ -393,6 +434,29 @@ function App() {
             <CircleForEB layoutId="circle" style={{ borderRadius: 0 }} />
           ) : null}
         </EighthBox>
+      </BoxesContainer>
+      <BoxesContainer>
+        <Grid>
+          {["1", "2", "3", "4"].map((n) => (
+            <LastBox onClick={() => setId(n)} key={n} layoutId={n} />
+          ))}
+        </Grid>
+        <AnimatePresence>
+          {id ? (
+            <Overlay
+              onClick={() => setId(null)}
+              variants={overlayVars}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+            >
+              <LastBox
+                layoutId={id}
+                style={{ width: 250, height: 200 }}
+              ></LastBox>
+            </Overlay>
+          ) : null}
+        </AnimatePresence>
       </BoxesContainer>
     </Wrapper>
   );
