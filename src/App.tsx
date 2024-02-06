@@ -12,6 +12,7 @@ const Wrapper = styled(motion.div)`
   height: 150vh;
   width: 100vw;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background: linear-gradient(135deg, rgb(135, 200, 146), rgb(106, 204, 204));
@@ -19,13 +20,14 @@ const Wrapper = styled(motion.div)`
 
 const BoxesContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 20px;
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 `;
 
 const FirstBox = styled(motion.div)`
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
   background-color: white;
   border-radius: 30px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
@@ -37,8 +39,8 @@ const firstVars = {
 };
 
 const SecondBox = styled(motion.div)`
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   background-color: rgba(255, 255, 255, 0.2);
@@ -63,10 +65,10 @@ const secondVars = {
 
 const Circle = styled(motion.div)`
   background-color: white;
-  height: 52.5px;
-  width: 52.5px;
+  height: 35px;
+  width: 35px;
   place-self: center;
-  border-radius: 30px;
+  border-radius: 25px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
@@ -79,8 +81,8 @@ const circleVars = {
 };
 
 const ThirdBox = styled(motion.div)`
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
   background-color: rgba(255, 255, 255, 1);
   border-radius: 30px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
@@ -92,8 +94,8 @@ const thirdVars = {
 };
 
 const WrapperBoxForFB = styled.div`
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 30px;
   display: flex;
@@ -103,10 +105,10 @@ const WrapperBoxForFB = styled.div`
 `;
 
 const FourthBox = styled(motion.div)`
-  width: 75px;
-  height: 75px;
+  width: 50px;
+  height: 50px;
   background-color: rgba(255, 255, 255, 1);
-  border-radius: 12px;
+  border-radius: 10px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
@@ -118,16 +120,16 @@ const fourthVars = {
 };
 
 const FifthBox = styled(motion.div)`
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
   background-color: rgba(255, 255, 255, 1);
   border-radius: 30px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
 const Svg = styled.svg`
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
   color: white;
   path {
     stroke: "white";
@@ -136,17 +138,30 @@ const Svg = styled.svg`
   }
 `;
 
+const svg = {
+  start: {
+    pathLength: 0,
+    stroke: "rgba(255, 255, 255, 0)",
+    fill: "rgba(135, 200, 146, 0)",
+  },
+  end: {
+    pathLength: 1,
+    stroke: "rgba(0, 0, 0, 1)",
+    fill: "rgb(13, 158, 0)",
+  },
+};
+
 const SixthBox = styled(motion.div)`
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
   background-color: rgba(255, 255, 255, 1);
   border-radius: 30px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
 const Button = styled.button`
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
   font-size: 22px;
   border: none;
   border-radius: 30px;
@@ -172,16 +187,44 @@ const sixthVars = {
   },
 };
 
-const svg = {
-  start: {
-    pathLength: 0,
-    stroke: "rgba(255, 255, 255, 0)",
-    fill: "rgba(135, 200, 146, 0)",
+const SeventhBox = styled(motion.div)`
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  margin-left: 120px;
+  font-size: 22px;
+  color: rgb(0, 132, 90);
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+`;
+
+const seventhVars = {
+  invisible: {
+    x: 500,
+    opacity: 0,
+    scale: 0,
   },
-  end: {
-    pathLength: 1,
-    stroke: "rgba(0, 0, 0, 1)",
-    fill: "rgb(13, 158, 0)",
+  visible: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+    },
+    rotateX: 360,
+  },
+  exit: {
+    x: -500,
+    opacity: 0,
+    scale: 0,
+    transition: {
+      duration: 0.5,
+    },
+    rotateX: 180,
   },
 };
 
@@ -202,6 +245,8 @@ function App() {
   const scale = useTransform(scrollYProgress, [0, 1], [0, 1.2]);
   const [showing, setShowing] = useState(false);
   const toggleShowing = () => setShowing((prev) => !prev);
+  const [visible, setVisible] = useState(1);
+  const nextPlease = () => setVisible((prev) => (prev === 10 ? 10 : prev + 1));
   return (
     <Wrapper style={{ background: gradient }}>
       <BoxesContainer>
@@ -266,6 +311,24 @@ function App() {
               />
             </>
           ) : null}
+        </AnimatePresence>
+      </BoxesContainer>
+      <BoxesContainer>
+        <Button onClick={nextPlease}>Next Number</Button>
+        <AnimatePresence>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) =>
+            i === visible ? (
+              <SeventhBox
+                variants={seventhVars}
+                initial="invisible"
+                animate="visible"
+                exit="exit"
+                key={i}
+              >
+                {i}
+              </SeventhBox>
+            ) : null
+          )}
         </AnimatePresence>
       </BoxesContainer>
     </Wrapper>
