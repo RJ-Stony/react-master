@@ -1,9 +1,15 @@
 import styled from "styled-components";
-import { motion, useMotionValue, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import { useRef, useState } from "react";
 
 const Wrapper = styled(motion.div)`
-  height: 200vh;
+  height: 150vh;
   width: 100vw;
   display: flex;
   justify-content: center;
@@ -13,7 +19,7 @@ const Wrapper = styled(motion.div)`
 
 const BoxesContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 `;
 
@@ -130,6 +136,42 @@ const Svg = styled.svg`
   }
 `;
 
+const SixthBox = styled(motion.div)`
+  width: 150px;
+  height: 150px;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 30px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+`;
+
+const Button = styled.button`
+  width: 150px;
+  height: 150px;
+  font-size: 22px;
+  border: none;
+  border-radius: 30px;
+  color: rgb(0, 132, 90);
+  background-color: rgba(255, 255, 255, 1);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+`;
+
+const sixthVars = {
+  initial: {
+    opacity: 0,
+    scale: 0,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    rotateZ: 360,
+  },
+  leaving: {
+    opacity: 0,
+    scale: 0,
+    y: 50,
+  },
+};
+
 const svg = {
   start: {
     pathLength: 0,
@@ -158,9 +200,8 @@ function App() {
   );
   const { scrollYProgress } = useScroll();
   const scale = useTransform(scrollYProgress, [0, 1], [0, 1.2]);
-  // useMotionValueEvent(x, "change", (I) => {
-  //   console.log(I);
-  // });
+  const [showing, setShowing] = useState(false);
+  const toggleShowing = () => setShowing((prev) => !prev);
   return (
     <Wrapper style={{ background: gradient }}>
       <BoxesContainer>
@@ -190,8 +231,8 @@ function App() {
         <Svg viewBox="0 0 16 18" xmlns="http://www.w3.org/2000/svg">
           <motion.path
             variants={svg}
-            initial={"start"}
-            animate={"end"}
+            initial="start"
+            animate="end"
             transition={{
               default: { duration: 3 },
               fill: { duration: 1, delay: 3 },
@@ -200,8 +241,8 @@ function App() {
           />
           <motion.path
             variants={svg}
-            initial={"start"}
-            animate={"end"}
+            initial="start"
+            animate="end"
             transition={{
               default: { duration: 3 },
               fill: { duration: 1, delay: 3 },
@@ -209,6 +250,23 @@ function App() {
             d="M1 13.4415C1 13.4415 1 8.77317 7.22443 7.99512"
           />
         </Svg>
+        {showing ? (
+          <Button onClick={toggleShowing}>Hide Box</Button>
+        ) : (
+          <Button onClick={toggleShowing}>Show Box</Button>
+        )}
+        <AnimatePresence>
+          {showing ? (
+            <>
+              <SixthBox
+                variants={sixthVars}
+                initial="initial"
+                animate="visible"
+                exit="leaving"
+              />
+            </>
+          ) : null}
+        </AnimatePresence>
       </BoxesContainer>
     </Wrapper>
   );
