@@ -69,6 +69,11 @@ const Box = styled(motion.div)<{ $bgphoto: string }>`
   }
 `;
 
+const Info = styled(motion.div)`
+  padding: 20px;
+  background-color: ${(props) => props.theme.black.lighter};
+`;
+
 const rowVariants = {
   hidden: {
     x: window.outerWidth + 5,
@@ -149,7 +154,9 @@ function Home() {
                       variants={boxVariants}
                       transition={{ type: "tween" }}
                       $bgphoto={makeImagePath(movie.backdrop_path, "w500")}
-                    />
+                    >
+                      <Info />
+                    </Box>
                   ))}
               </Row>
             </AnimatePresence>
