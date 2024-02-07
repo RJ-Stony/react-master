@@ -1,9 +1,15 @@
 import { Link, useMatch } from "react-router-dom";
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import "../static/fonts/font.css";
+import {
+  motion,
+  useAnimation,
+  useMotionValueEvent,
+  useScroll,
+} from "framer-motion";
 import { useState } from "react";
 
-const Nav = styled.nav`
+const Nav = styled(motion.nav)`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -14,7 +20,6 @@ const Nav = styled.nav`
   padding: 20px 20px;
   top: 0;
   color: white;
-  background-color: black;
 `;
 
 const Col = styled.div`
@@ -85,10 +90,21 @@ const Circle = styled(motion.span)`
 `;
 
 const Input = styled(motion.input)`
+  font-family: "Restart";
+  right: 0px;
+  padding: 5px 10px;
+  padding-bottom: 8px;
+  padding-left: 32px;
+  z-index: -1;
+  color: white;
+  font-size: 18px;
+  background-color: transparent;
+  border: 1px solid ${(props) => props.theme.white.lighter};
   border-radius: 5px;
   transform-origin: right center;
   position: absolute;
-  left: -150px;
+  left: -185px;
+  width: 195px;
 `;
 
 const logoVariants = {
@@ -103,20 +119,47 @@ const logoVariants = {
   },
 };
 
+const navVariants = {
+  top: { backgroundColor: "rgba(0, 0, 0, 0)" },
+  scroll: { backgroundColor: "rgba(0, 0, 0, 1)" },
+};
+
 function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
-  // useMatch: Route에 따른 Circle의 위치 변화를 주기 위함.
+  // useMatch: Route에 따른 Circle의 위치 변화를 줄 때
   const homeMatch = useMatch("/");
   const tvMatch = useMatch("tv");
+  // useAnimation: 코드를 통해 animation을 실행하고 싶을 때
+  const inputAnimation = useAnimation();
+  const navAnimation = useAnimation();
+  // useScroll: 스크롤에 따른 배경색 변화를 줄 때
+  const { scrollY } = useScroll();
 
-  const toggleSearch = () => setSearchOpen((prev) => !prev);
+  const toggleSearch = () => {
+    if (searchOpen) {
+      inputAnimation.start({
+        scaleX: 0,
+      });
+    } else {
+      inputAnimation.start({ scaleX: 1 });
+    }
+    setSearchOpen((prev) => !prev);
+  };
+  useMotionValueEvent(scrollY, "change", () => {
+    if (scrollY.get() > 80) {
+      navAnimation.start("scroll");
+    } else {
+      navAnimation.start("top");
+    }
+  });
+
   return (
-    <Nav>
+    <Nav variants={navVariants} initial={"top"} animate={navAnimation}>
       <Col>
         <Logo
           variants={logoVariants}
           whileHover="active"
-          initial="normal"
+          animate="normal"
           xmlns="http://www.w3.org/2000/svg"
           version="1.0"
           viewBox="0 0 210.000000 70.000000"
@@ -167,9 +210,10 @@ function Header() {
         </Items>
       </Col>
       <Col>
-        <Search onClick={toggleSearch}>
+        <Search>
           <motion.svg
-            animate={{ x: searchOpen ? -172 : 0 }}
+            onClick={toggleSearch}
+            animate={{ x: searchOpen ? -175 : 0 }}
             transition={{ ease: "linear" }}
             viewBox="0 0 16 16"
             xmlns="http://www.w3.org/2000/svg"
@@ -178,7 +222,8 @@ function Header() {
           </motion.svg>
           <Input
             transition={{ ease: "linear" }}
-            animate={{ scaleX: searchOpen ? 1 : 0 }}
+            initial={{ scaleX: 0 }}
+            animate={inputAnimation}
             placeholder="시청할 항목을 검색해주세요 :)"
           />
         </Search>
