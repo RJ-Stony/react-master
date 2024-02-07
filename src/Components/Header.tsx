@@ -1,6 +1,7 @@
 import { Link, useMatch } from "react-router-dom";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 const Nav = styled.nav`
   display: flex;
@@ -61,12 +62,17 @@ const Item = styled.li`
 
 const Search = styled.span`
   color: white;
+  display: flex;
+  align-items: center;
+  position: relative;
   svg {
-    height: 25px;
+    width: 16px;
+    height: 16px;
+    fill: ${(props) => props.theme.white.lighter};
   }
 `;
 
-const Circle = styled.span`
+const Circle = styled(motion.span)`
   position: absolute;
   width: 5px;
   height: 5px;
@@ -76,6 +82,13 @@ const Circle = styled.span`
   right: 0;
   margin: 0 auto;
   background-color: ${(props) => props.theme.red};
+`;
+
+const Input = styled(motion.input)`
+  border-radius: 5px;
+  transform-origin: right center;
+  position: absolute;
+  left: -150px;
 `;
 
 const logoVariants = {
@@ -91,8 +104,12 @@ const logoVariants = {
 };
 
 function Header() {
+  const [searchOpen, setSearchOpen] = useState(false);
+  // useMatch: Route에 따른 Circle의 위치 변화를 주기 위함.
   const homeMatch = useMatch("/");
   const tvMatch = useMatch("tv");
+
+  const toggleSearch = () => setSearchOpen((prev) => !prev);
   return (
     <Nav>
       <Col>
@@ -140,15 +157,31 @@ function Header() {
         </Logo>
         <Items>
           <Item>
-            <Link to="/">Home {homeMatch && <Circle />}</Link>
+            <Link to="/">Home {homeMatch && <Circle layoutId="circle" />}</Link>
           </Item>
           <Item>
-            <Link to="Tv">TV Shows {tvMatch && <Circle />}</Link>
+            <Link to="Tv">
+              TV Shows {tvMatch && <Circle layoutId="circle" />}
+            </Link>
           </Item>
         </Items>
       </Col>
       <Col>
-        <button>Search</button>
+        <Search onClick={toggleSearch}>
+          <motion.svg
+            animate={{ x: searchOpen ? -172 : 0 }}
+            transition={{ ease: "linear" }}
+            viewBox="0 0 16 16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M6.3833 12.8767C7.76953 12.8767 9.04785 12.4285 10.0938 11.6814L14.0283 15.616C14.2109 15.7986 14.4517 15.8899 14.709 15.8899C15.2485 15.8899 15.6304 15.4749 15.6304 14.9436C15.6304 14.6946 15.5474 14.4539 15.3647 14.2795L11.4551 10.3616C12.2769 9.28247 12.7666 7.94604 12.7666 6.49341C12.7666 2.98218 9.89453 0.110107 6.3833 0.110107C2.88037 0.110107 0 2.97388 0 6.49341C0 10.0046 2.87207 12.8767 6.3833 12.8767ZM6.3833 11.4988C3.64404 11.4988 1.37793 9.23267 1.37793 6.49341C1.37793 3.75415 3.64404 1.48804 6.3833 1.48804C9.12256 1.48804 11.3887 3.75415 11.3887 6.49341C11.3887 9.23267 9.12256 11.4988 6.3833 11.4988Z" />
+          </motion.svg>
+          <Input
+            transition={{ ease: "linear" }}
+            animate={{ scaleX: searchOpen ? 1 : 0 }}
+            placeholder="시청할 항목을 검색해주세요 :)"
+          />
+        </Search>
       </Col>
     </Nav>
   );
