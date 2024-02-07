@@ -16,7 +16,7 @@ const Loader = styled.div`
   align-items: center;
 `;
 
-const Banner = styled.div<{ bgphoto: string }>`
+const Banner = styled.div<{ $bgphoto: string }>`
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -24,7 +24,7 @@ const Banner = styled.div<{ bgphoto: string }>`
   padding: 40px;
   // 가려지는 글씨를 보완.
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
-    url(${(props) => props.bgphoto});
+    url(${(props) => props.$bgphoto});
   background-size: cover;
 `;
 
@@ -53,9 +53,9 @@ const Row = styled(motion.div)`
   width: 100%;
 `;
 
-const Box = styled(motion.div)<{ bgphoto: string }>`
+const Box = styled(motion.div)<{ $bgphoto: string }>`
   background-color: white;
-  background-image: url(${(props) => props.bgphoto});
+  background-image: url(${(props) => props.$bgphoto});
   background-size: cover;
   background-position: center center;
   height: 200px;
@@ -102,7 +102,7 @@ function Home() {
         <>
           <Banner
             onClick={incraseIndex}
-            bgphoto={makeImagePath(data?.results[2].backdrop_path || "")}
+            $bgphoto={makeImagePath(data?.results[2].backdrop_path || "")}
           >
             <Title>{data?.results[2].title}</Title>
             <Overview>{data?.results[2].overview}</Overview>
@@ -123,7 +123,7 @@ function Home() {
                   .map((movie) => (
                     <Box
                       key={movie.id}
-                      bgphoto={makeImagePath(movie.backdrop_path, "w500")}
+                      $bgphoto={makeImagePath(movie.backdrop_path, "w500")}
                     />
                   ))}
               </Row>
