@@ -71,8 +71,8 @@ const Search = styled.span`
   align-items: center;
   position: relative;
   svg {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     fill: ${(props) => props.theme.white.lighter};
   }
 `;
@@ -90,21 +90,20 @@ const Circle = styled(motion.span)`
 `;
 
 const Input = styled(motion.input)`
-  font-family: "Restart";
+  font-family: "NPSfontRegular";
   right: 0px;
   padding: 5px 10px;
-  padding-bottom: 8px;
-  padding-left: 32px;
+  padding-left: 26px;
   z-index: -1;
   color: white;
-  font-size: 18px;
+  font-size: 12px;
   background-color: transparent;
   border: 1px solid ${(props) => props.theme.white.lighter};
   border-radius: 5px;
   transform-origin: right center;
   position: absolute;
-  left: -185px;
-  width: 195px;
+  left: -175px;
+  width: 185px;
 `;
 
 const logoVariants = {
@@ -213,7 +212,7 @@ function Header() {
         <Search>
           <motion.svg
             onClick={toggleSearch}
-            animate={{ x: searchOpen ? -175 : 0 }}
+            animate={{ x: searchOpen ? -168 : 0 }}
             transition={{ ease: "linear" }}
             viewBox="0 0 16 16"
             xmlns="http://www.w3.org/2000/svg"
