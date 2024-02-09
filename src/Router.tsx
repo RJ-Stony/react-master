@@ -3,6 +3,8 @@ import Root from "./Root";
 import Home from "./Routes/Home";
 import Tv from "./Routes/Tv";
 import Search from "./Routes/Search";
+import NotFound from "./Routes/NotFound";
+import ErrorComponent from "./Components/ErrorComponent";
 
 const router = createBrowserRouter([
   {
@@ -12,6 +14,7 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
+        errorElement: <ErrorComponent />,
       },
       {
         path: "tv",
@@ -22,6 +25,7 @@ const router = createBrowserRouter([
         element: <Search />,
       },
     ],
+    errorElement: <NotFound />,
   },
   {
     path: "movies/:movieId",
