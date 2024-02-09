@@ -2,10 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { RecoilRoot } from "recoil";
 
-import App from "./App";
 import { theme } from "./theme";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { RouterProvider } from "react-router-dom";
+import router from "./Router";
 
 const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
@@ -85,7 +86,7 @@ root.render(
     <QueryClientProvider client={client}>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
-        <App />
+        <RouterProvider router={router} />
       </ThemeProvider>
     </QueryClientProvider>
   </RecoilRoot>
